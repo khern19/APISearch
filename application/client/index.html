@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Search App</title>
+
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		/>
+	</head>
+	<body>
+		<div id="houses" v-cloak>
+			<div class="jumbotron jumbotron-fluid">
+				<!-- Application Title and tagline-->
+				<div class="row">
+					<div class="col">
+						<div class="col-lg">
+							<h1 class="display-2" style="font-family: Times;">{{appName}}</h1>
+							<p class="lead" style="font-family: Times;">
+								search for a house name in the ice and fire api
+							</p>
+						</div>
+						<!-- type in search bar -->
+						<div class="col-lg" v-show="searchBar">
+							<div class="row">
+								<input
+									type="text"
+									class="form-control"
+									placeholder="enter house name"
+									v-model="houseInput"
+									style="font-family: Times;"
+								/>
+							</div>
+							<br />
+							<!-- SearchButton-->
+							<div class="row">
+								<button
+									@click="searchHouse"
+									class="btn btn-dark"
+									v-bind:disabled="houseInput.length === 0"
+								>
+									Search
+								</button>
+							</div>
+						</div>
+
+						<!-- Show Results List-->
+						<div class="col-lg" v-show="searchList && !searchBar">
+							<div class="col">
+								<span class="h3">Search Results: {{ totalSearchResults }} </span>
+							</div>
+							<br />
+							<div class="col" v-for="results in houseResults">
+								<label @click="houseId(results)" style="font-family: Times;"
+									>{{ results.name }}
+								</label>
+								<hr />
+							</div>
+						</div>
+						<!-- Display chosen result-->
+						<div class="col-lg" v-show="Object.keys(returnResult).length">
+							<div class="row">
+								<div class="col">
+									<img v-bind:src="defaultImage" class="img-thumbnail border-0" />
+								</div>
+								<div class="col">
+									<div>
+										<ul class="list-group">
+											<li class="list-group-item" style="border: none;">
+												<strong>House name: </strong>{{ returnResult.name }}
+											</li>
+											<li class="list-group-item" style="border: none;">
+												<strong>House region: </strong>{{ returnResult.region }}
+											</li>
+											<li class="list-group-item" style="border: none;">
+												<strong>House code of arms: </strong>
+												{{ returnResult.coatOfArms }}
+											</li>
+										</ul>
+									</div>
+									<div>
+										<!-- Do another search-->
+										<button @click="searchAgain" class="btn btn-dark">
+											Search Again
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Pass in component to show search history-->
+					<div class="col text-white bg-dark" style="font-family: Times; font-size: 200%;">
+						Search History
+						<search-component v-bind:search-history="searchHistory"></search-component>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="app.js" type="text/javascript"></script>
+	</body>
+</html>
